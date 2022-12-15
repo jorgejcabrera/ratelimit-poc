@@ -59,4 +59,16 @@ class NotificationControllerTest {
         // THEN
         assertEquals(HttpStatus.ACCEPTED_202, response.status)
     }
+
+    @Test
+    fun `when send more than one notification but it not exceed the limit, then an accepted must be returned`() {
+        // GIVEN
+        val request = SendNotificationRequest(userId = "cabrerajjorge@gmail.com", type = "news", message = "Hi Jorge!")
+
+        // THEN
+        repeat(3) {
+            assertEquals(HttpStatus.ACCEPTED_202, controller.dispatch(request).status)
+            Thread.sleep(1000)
+        }
+    }
 }
