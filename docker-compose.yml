@@ -18,7 +18,7 @@ services:
       - "8089:8089"
     volumes:
       - ./:/mnt/locust
-    command: -f /mnt/locust/locustfile.py --master -H http://microservice/notification
+    command: -f /mnt/locust/locustfile.py --master -H http://microservice:8080/notification
 
   worker:
     image: locustio/locust

@@ -18,7 +18,7 @@ class ServiceApp : Application<ServiceConfiguration>() {
 
     override fun run(configuration: ServiceConfiguration, environment: Environment) {
 
-        val statusRateLimit = RateLimit(type = "status", 2, Duration.ofMinutes(1))
+        val statusRateLimit = RateLimit(type = "status", 300, Duration.ofSeconds(1))
         val newsRateLimit = RateLimit(type = "news", 1, Duration.ofDays(1))
         val marketingRateLimit = RateLimit(type = "marketing", 3, Duration.ofHours(1))
         val messageCounter = MessageCounterImpl(
