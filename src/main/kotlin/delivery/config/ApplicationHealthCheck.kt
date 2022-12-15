@@ -1,4 +1,4 @@
-package delivery
+package delivery.config
 import com.codahale.metrics.health.HealthCheck
 
 

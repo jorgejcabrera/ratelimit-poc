@@ -13,11 +13,22 @@ repositories {
 }
 
 val dropwizardCoreVersion = "2.1.2"
+val caffeineCacheVersion = "3.1.1"
+val mockkVersion = "1.13.2"
+val junitVersion = "5.9.0"
 
 dependencies {
     testImplementation(kotlin("test"))
 
     implementation("io.dropwizard:dropwizard-core:$dropwizardCoreVersion")
+    implementation("com.github.ben-manes.caffeine:caffeine:${caffeineCacheVersion}")
+
+    // Test
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testImplementation("io.mockk:mockk:${mockkVersion}")
+
 }
 
 tasks.test {

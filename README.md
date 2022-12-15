@@ -23,7 +23,7 @@ Below you'll find a code snippet that can serve as a guidance of one of the impl
 
 
 
-Please share with us the link of the repository containing the application source code when finished and let us know to schedule the meeting to review the app.
+Please share with us the link of the repository containing the ratelimit source code when finished and let us know to schedule the meeting to review the app.
 
 
 

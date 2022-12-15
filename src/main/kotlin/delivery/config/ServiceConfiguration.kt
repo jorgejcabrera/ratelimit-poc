@@ -1,4 +1,4 @@
-package delivery
+package delivery.config
 
 import io.dropwizard.Configuration
 import javax.inject.Singleton
