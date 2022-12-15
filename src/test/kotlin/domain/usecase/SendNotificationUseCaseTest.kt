@@ -23,9 +23,11 @@ class SendNotificationUseCaseTest {
 
     private lateinit var sendNotificationUseCase: SendNotificationUseCase
 
+    private val statusUnitOfTime = ofSeconds(1)
+
     @BeforeEach
     fun startUp() {
-        val statusRateLimit = RateLimit("status", 2, ofSeconds(1))
+        val statusRateLimit = RateLimit("status", 2, statusUnitOfTime)
         val newsRateLimit = RateLimit(type = "news", 1, ofDays(1))
 
         messageSentCounter = MessageSentCounterImpl(
@@ -74,6 +76,18 @@ class SendNotificationUseCaseTest {
         // WHEN
         repeat(2) {
             sendNotificationUseCase.invoke("status", "cabrerajjorge@gmail.com", "Hi Jorge!")
+        }
+
+        // THEN
+        noExceptionWasThrown()
+    }
+
+    @Test
+    fun `a request must be expired properly`() {
+        // WHEN
+        repeat(3) {
+            sendNotificationUseCase.invoke("status", "cabrerajjorge@gmail.com", "Hi Jorge!")
+            Thread.sleep(statusUnitOfTime.toMillis() / 2)
         }
 
         // THEN

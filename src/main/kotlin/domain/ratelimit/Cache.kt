@@ -2,17 +2,19 @@ package domain.ratelimit
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import java.time.Duration
+import java.time.LocalDateTime
 
+data class Item(val expiredAt: LocalDateTime)
 class Cache(
     val keyPrefix: String,
-    timeToLive: Duration,
+    val timeToLive: Duration,
     maximumEntries: Long = Long.MAX_VALUE,
 ) {
     private val caffeineCache = Caffeine.newBuilder()
         .maximumSize(maximumEntries)
         .expireAfterWrite(timeToLive)
         .recordStats()
-        .build<String, Int>()
+        .build<String, MutableList<Item>>()
 
     private fun buildKey(userId: String): String {
         return "$keyPrefix-$userId"
@@ -22,14 +24,16 @@ class Cache(
         val key = buildKey(userId)
         val cachedElement = caffeineCache.getIfPresent(key)
         if (cachedElement != null) {
-            caffeineCache.put(key, cachedElement + 1)
+            cachedElement.add(Item(LocalDateTime.now().plus(timeToLive)))
+            caffeineCache.put(key, cachedElement)
         } else {
-            caffeineCache.put(key, 1)
+            caffeineCache.put(key, mutableListOf(Item(LocalDateTime.now().plus(timeToLive))))
         }
     }
 
     fun get(userId: String): Int {
         val key = buildKey(userId)
-        return caffeineCache.getIfPresent(key) ?: 0
+        val items = caffeineCache.getIfPresent(key)
+        return items?.filter { it.expiredAt >= LocalDateTime.now() }?.size ?: 0
     }
 }
