@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+  microservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: microservice
+    environment:
+      - "SERVER_PORT=8080"
+    ports:
+      - "8080:8080"
+
+  master:
+    image: locustio/locust
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --master -H http://microservice/notification
+
+  worker:
+    image: locustio/locust
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host master
