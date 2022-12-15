@@ -1,11 +1,11 @@
 package domain.ratelimit
 
-interface MessageSentCounter {
+interface MessageCounter {
     fun quote(type: String, userId: String): Int
     fun increase(type: String, userId: String)
 }
 
-class MessageSentCounterImpl(private val buckets: List<Cache>) : MessageSentCounter {
+class MessageCounterImpl(private val buckets: List<Cache>) : MessageCounter {
     override fun quote(type: String, userId: String): Int {
         return buckets.find { it.keyPrefix == type }?.get(userId) ?: 0
     }
@@ -13,5 +13,4 @@ class MessageSentCounterImpl(private val buckets: List<Cache>) : MessageSentCoun
     override fun increase(type: String, userId: String) {
         buckets.find { it.keyPrefix == type }?.save(userId)
     }
-
 }

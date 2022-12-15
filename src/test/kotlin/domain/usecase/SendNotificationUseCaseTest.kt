@@ -17,7 +17,7 @@ class SendNotificationUseCaseTest {
     @RelaxedMockK
     private lateinit var notificationService: NotificationService
 
-    private lateinit var messageSentCounter: MessageSentCounter
+    private lateinit var messageCounter: MessageCounter
 
     private lateinit var rateLimitService: RateLimitService
 
@@ -30,13 +30,13 @@ class SendNotificationUseCaseTest {
         val statusRateLimit = RateLimit("status", 2, statusUnitOfTime)
         val newsRateLimit = RateLimit(type = "news", 1, ofDays(1))
 
-        messageSentCounter = MessageSentCounterImpl(
+        messageCounter = MessageCounterImpl(
             listOf(
                 Cache(statusRateLimit.type, statusRateLimit.unitOfTime),
                 Cache(newsRateLimit.type, newsRateLimit.unitOfTime),
             )
         )
-        rateLimitService = RateLimitServiceImpl(messageSentCounter, rateLimits = listOf(statusRateLimit, newsRateLimit))
+        rateLimitService = RateLimitServiceImpl(messageCounter, rateLimits = listOf(statusRateLimit, newsRateLimit))
         sendNotificationUseCase = SendNotificationUseCase(notificationService, rateLimitService)
     }
 

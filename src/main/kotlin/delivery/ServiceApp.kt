@@ -5,7 +5,7 @@ import delivery.config.ServiceConfiguration
 import delivery.rest.NotificationController
 import domain.notification.NotificationServiceImpl
 import domain.ratelimit.Cache
-import domain.ratelimit.MessageSentCounterImpl
+import domain.ratelimit.MessageCounterImpl
 import domain.ratelimit.RateLimitServiceImpl
 import domain.ratelimit.RateLimit
 import domain.usecase.SendNotificationUseCase
@@ -22,7 +22,7 @@ class ServiceApp : Application<ServiceConfiguration>() {
         val statusRateLimit = RateLimit(type = "status", 2, Duration.ofMinutes(1))
         val newsRateLimit = RateLimit(type = "news", 1, Duration.ofDays(1))
         val marketingRateLimit = RateLimit(type = "marketing", 3, Duration.ofHours(1))
-        val messageCounter = MessageSentCounterImpl(
+        val messageCounter = MessageCounterImpl(
             listOf(
                 Cache(
                     keyPrefix = statusRateLimit.type,
@@ -48,7 +48,7 @@ class ServiceApp : Application<ServiceConfiguration>() {
             marketingRateLimit
         )
         val rateLimitService = RateLimitServiceImpl(
-            messageSentCounter = messageCounter,
+            messageCounter = messageCounter,
             rateLimits = rateLimits
         )
         val notificationService = NotificationServiceImpl()

@@ -7,16 +7,16 @@ interface RateLimitService {
 }
 
 class RateLimitServiceImpl(
-    private val messageSentCounter: MessageSentCounter,
+    private val messageCounter: MessageCounter,
     private val rateLimits: List<RateLimit>
 ) : RateLimitService {
     override fun acquire(type: String, userId: String) {
         val rateLimit = rateLimits.find { it.type == type }
-        val quote = messageSentCounter.quote(type, userId)
+        val quote = messageCounter.quote(type, userId)
         if (quoteHasBeenExceeded(quote, rateLimit!!)) {
             throw RuntimeException("Maximum number of request has been reached")
         }
-        messageSentCounter.increase(type, userId)
+        messageCounter.increase(type, userId)
     }
 
     private fun quoteHasBeenExceeded(quote: Int, rateLimit: RateLimit): Boolean {
