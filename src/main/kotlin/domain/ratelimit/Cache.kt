@@ -10,7 +10,7 @@ class Cache(
     val timeToLive: Duration,
     maximumEntries: Long = Long.MAX_VALUE,
 ) {
-    private val caffeineCache = Caffeine.newBuilder()
+    internal val caffeineCache = Caffeine.newBuilder()
         .maximumSize(maximumEntries)
         .expireAfterWrite(timeToLive)
         .recordStats()
@@ -31,7 +31,7 @@ class Cache(
         }
     }
 
-    fun get(userId: String): Int {
+    fun counter(userId: String): Int {
         val key = buildKey(userId)
         val items = caffeineCache.getIfPresent(key)
         return items?.filter { it.expiredAt >= LocalDateTime.now() }?.size ?: 0
