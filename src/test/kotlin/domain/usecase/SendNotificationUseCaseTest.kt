@@ -94,7 +94,5 @@ class SendNotificationUseCaseTest {
         noExceptionWasThrown()
     }
 
-    private fun noExceptionWasThrown() {
-
-    }
+    private fun noExceptionWasThrown() {}
 }
