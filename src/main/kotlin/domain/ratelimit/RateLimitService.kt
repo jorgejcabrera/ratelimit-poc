@@ -7,7 +7,7 @@ interface RateLimitService {
 }
 
 class RateLimitServiceImpl(
-    private val messageCounter: MessageSentCounter,
+    private val messageCounter: MessageCounter,
     private val rateLimits: List<RateLimit>
 ) : RateLimitService {
     override fun acquire(type: String, userId: String) {

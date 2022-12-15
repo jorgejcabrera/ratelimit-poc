@@ -17,7 +17,6 @@ import java.time.Duration
 class ServiceApp : Application<ServiceConfiguration>() {
 
     override fun run(configuration: ServiceConfiguration, environment: Environment) {
-        val defaultSize: Int = configuration.defaultSize
 
         val statusRateLimit = RateLimit(type = "status", 2, Duration.ofMinutes(1))
         val newsRateLimit = RateLimit(type = "news", 1, Duration.ofDays(1))
